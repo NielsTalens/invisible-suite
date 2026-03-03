@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/timy"
+
+Timy::EnvLoader.load
+
+if ENV["OPENAI_API_KEY"].to_s.strip.empty?
+  warn "OPENAI_API_KEY is required. Create .env from .env.example and set the key."
+  exit 1
+end
+
+loader = Timy::InputLoader.new("inbox")
+recognizer = Timy::OpenAiRecognizer.new
+validator = Timy::EntryValidator.new
+repository = Timy::YamlRepository.new(data_dir: "data")
+reporter = Timy::CliReporter.new
+
+processor = Timy::Processor.new(
+  loader: loader,
+  recognizer: recognizer,
+  validator: validator,
+  repository: repository,
+  reporter: reporter
+)
+processor.run

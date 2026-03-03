@@ -52,6 +52,7 @@ Timy makes time tracking effortless by turning everyday communication into struc
 ---
 
 # Product principles
+
 ## 1. No New Behavior
 Users should not have to learn a new tool or change how they work. Timy adapts to existing communication habits.
 
@@ -82,6 +83,7 @@ Every feature must reduce friction, manual work, or cognitive load.
 ---
 
 # JTBD Job stories
+
 ## Time Reporters
 
 1. When I finish a workday or week,
