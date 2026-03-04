@@ -1,11 +1,12 @@
 const form = document.getElementById("entry-form");
 const inputPanel = document.getElementById("input-panel");
 const composerShell = document.getElementById("composer-shell");
+const layoutRoot = document.getElementById("layout-root");
+const resultsPanel = document.getElementById("results-panel");
 const summaryEl = document.getElementById("summary");
 const entriesEl = document.getElementById("entries");
 const followupsEl = document.getElementById("followups");
-const resultsContent = document.getElementById("results-content");
-const toggleResultsButton = document.getElementById("toggle-results");
+const toggleResultsButtons = document.querySelectorAll("[data-results-toggle]");
 const statusLine = document.getElementById("status-line");
 const statusText = document.getElementById("status-text");
 const statusElapsed = document.getElementById("status-elapsed");
@@ -119,7 +120,11 @@ function showError(message) {
 }
 
 function updateResultsToggleLabel() {
-  toggleResultsButton.textContent = resultsContent.hidden ? "Show Results" : "Hide Results";
+  const hidden = resultsPanel.hidden;
+  toggleResultsButtons.forEach((button) => {
+    button.textContent = hidden ? "Show Results" : "Hide Results";
+  });
+  layoutRoot.classList.toggle("results-hidden", hidden);
 }
 
 function formatElapsed(seconds) {
@@ -181,9 +186,11 @@ form.addEventListener("change", (event) => {
   }
 });
 
-toggleResultsButton.addEventListener("click", () => {
-  resultsContent.hidden = !resultsContent.hidden;
-  updateResultsToggleLabel();
+toggleResultsButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    resultsPanel.hidden = !resultsPanel.hidden;
+    updateResultsToggleLabel();
+  });
 });
 
 form.addEventListener("submit", async (event) => {
