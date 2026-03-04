@@ -7,7 +7,7 @@ Invisible Suite exists to change that. Instead of adding another tool, it remove
 
 | Logo | App | Description |
 |-----|-----|-------------|
-| <img src="/timy/timy.svg" alt="Timy" width="90"> | **Timy** | Timy makes time tracking effortless by turning everyday communication into structured, accurate timesheets without requiring another app. |
+| <img src="/timy/images/timy.svg" alt="Timy" width="100"> | **Timy** | Timy makes time tracking effortless by turning everyday communication into structured, accurate timesheets without requiring another app. |
 |  | **Day One** | Day One gives you the best first-day onboarding experience based on your profile. |
 |  | **Order Input** | Order receiving and entry app. |
 
