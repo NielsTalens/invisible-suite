@@ -60,6 +60,7 @@ class AppTest < Minitest::Test
       body = JSON.parse(last_response.body)
       assert_equal 2, body.dig("summary", "processed")
       assert_equal 2, body.fetch("entries").length
+      assert_equal 2, body.fetch("created_source_files").length
     end
   ensure
     TimyWeb.set :inbox_dir, "inbox"

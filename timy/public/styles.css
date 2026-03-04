@@ -31,6 +31,22 @@ body {
   border-radius: 14px;
   padding: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#input-panel.channel-mail {
+  border-color: #7ba5da;
+  box-shadow: 0 10px 28px rgba(40, 92, 171, 0.16);
+}
+
+#input-panel.channel-sms {
+  border-color: #8d7dd8;
+  box-shadow: 0 10px 28px rgba(90, 61, 177, 0.18);
+}
+
+#input-panel.channel-whatsapp {
+  border-color: #3da57a;
+  box-shadow: 0 10px 28px rgba(31, 122, 79, 0.2);
 }
 
 .subtitle { margin-top: 0; color: #5b5651; }
@@ -43,12 +59,92 @@ input, textarea, select, button {
   border: 1px solid var(--border);
   padding: 0.6rem 0.75rem;
 }
+textarea { resize: vertical; }
 button {
   border: none;
   background: var(--accent);
   color: #fff;
   font-weight: 700;
   cursor: pointer;
+}
+
+.channel-picker {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem;
+  margin: 0;
+}
+
+.channel-picker legend {
+  font-weight: 700;
+  padding: 0 0.25rem;
+}
+
+.channel-option {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.45rem 0.55rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.channel-option + .channel-option { margin-top: 0.35rem; }
+
+.channel-option input { margin: 0; }
+
+.channel-option .emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.channel-option.active {
+  background: var(--accent-soft);
+}
+
+.composer-shell {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem;
+}
+
+.composer-meta { display: none; margin-bottom: 0.6rem; }
+.meta-row { font-size: 0.9rem; color: #4f565f; }
+.meta-label { font-weight: 700; color: #2c3440; }
+.meta-pill {
+  display: inline-block;
+  background: #e4ebf7;
+  color: #22324b;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.meta-pill.whatsapp { background: #d4f5e6; color: #17553a; }
+.meta-hint { margin-top: 0.2rem; font-size: 0.85rem; color: #6a645b; }
+
+.composer-mail {
+  background: linear-gradient(180deg, #f0f6ff 0%, #fdfefe 100%);
+}
+.composer-mail #composer-meta-mail { display: block; }
+
+.composer-sms {
+  background: linear-gradient(180deg, #f5f2ff 0%, #fcfbff 100%);
+}
+.composer-sms #composer-meta-sms { display: block; }
+.composer-sms textarea {
+  background: #f1edff;
+  border-color: #c8b9ff;
+}
+
+.composer-whatsapp {
+  background: linear-gradient(180deg, #ecfff5 0%, #f9fffb 100%);
+}
+.composer-whatsapp #composer-meta-whatsapp { display: block; }
+.composer-whatsapp textarea {
+  background: #edfff5;
+  border-color: #94d8b3;
 }
 
 .summary {
@@ -72,6 +168,27 @@ button {
   margin-bottom: 0.5rem;
 }
 
+.results-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.results-head h2 {
+  margin: 0 0 0.5rem 0;
+}
+
+.toggle-results {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #3f3a33;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .followups {
   margin-top: 0.75rem;
   padding: 0.75rem;
@@ -80,7 +197,30 @@ button {
   border-radius: 10px;
 }
 
-#status-line { margin-bottom: 0.75rem; font-weight: 500; }
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+.status-spinner {
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid #d4d4d4;
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  opacity: 0;
+}
+.status-line.is-processing .status-spinner {
+  opacity: 1;
+  animation: spin 0.8s linear infinite;
+}
+.status-elapsed {
+  margin-left: auto;
+  color: #666057;
+  font-variant-numeric: tabular-nums;
+}
 .error { color: #b0281a; }
 .warning { color: var(--warn); }
 .error-box {
@@ -93,6 +233,50 @@ button {
   padding: 0.55rem 0.7rem;
 }
 .error-box.visible { display: block; }
+
+.latest-confirmation {
+  margin-top: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+.latest-confirmation.hidden { display: none; }
+.latest-confirmation h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+.latest-confirmation.channel-mail {
+  background: linear-gradient(180deg, #f0f6ff 0%, #fdfefe 100%);
+  border-color: #7ba5da;
+}
+.latest-confirmation.channel-sms {
+  background: linear-gradient(180deg, #f5f2ff 0%, #fcfbff 100%);
+  border-color: #8d7dd8;
+}
+.latest-confirmation.channel-whatsapp {
+  background: linear-gradient(180deg, #ecfff5 0%, #f9fffb 100%);
+  border-color: #3da57a;
+}
+.confirmation-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  background: #ffffffcc;
+}
+.confirmation-item + .confirmation-item { margin-top: 0.45rem; }
+.confirmation-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+.confirmation-sender { font-weight: 700; }
+.confirmation-status.ok { color: #1f6f4f; }
+.confirmation-status.needs-clarification { color: #8a4b00; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }

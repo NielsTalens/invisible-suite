@@ -10,31 +10,71 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main class="layout">
-      <section id="input-panel" class="panel">
+    <main id="layout-root" class="layout">
+      <section id="input-panel" class="panel channel-mail">
         <h1>Timy Simulator</h1>
-        <p class="subtitle">Enter a message and process it immediately.</p>
+        <p class="subtitle">Enter one message per line and process immediately.</p>
 
         <form id="entry-form">
-          <label>
-            Channel
-            <select name="channel" required>
-              <option value="mail">Mail (niels@example.com)</option>
-              <option value="sms">SMS (+3165892356)</option>
-              <option value="whatsapp">WhatsApp (+3156455645)</option>
-            </select>
-          </label>
-          <label>
-            Message
-            <textarea name="message" rows="10" placeholder="One entry per line&#10;Worked 2h on Alpha&#10;30m sprint planning" required></textarea>
-          </label>
-          <button type="submit">Submit and Process</button>
+          <fieldset class="channel-picker" role="radiogroup" aria-label="Select channel">
+            <legend>Channel</legend>
+            <label for="channel-mail" class="channel-option active">
+              <input id="channel-mail" type="radio" name="channel" value="mail" checked />
+              <span class="emoji" aria-hidden="true">✉️</span>
+              <span>Mail</span>
+            </label>
+            <label for="channel-sms" class="channel-option">
+              <input id="channel-sms" type="radio" name="channel" value="sms" />
+              <span class="emoji" aria-hidden="true">💬</span>
+              <span>SMS</span>
+            </label>
+            <label for="channel-whatsapp" class="channel-option">
+              <input id="channel-whatsapp" type="radio" name="channel" value="whatsapp" />
+              <span class="emoji" aria-hidden="true">🟢</span>
+              <span>WhatsApp</span>
+            </label>
+          </fieldset>
+
+          <section id="composer-shell" class="composer-shell composer-mail">
+            <header id="composer-meta-mail" class="composer-meta">
+              <div class="meta-row"><span class="meta-label">From:</span> Timy Demo</div>
+              <div class="meta-row"><span class="meta-label">To:</span> Project mailbox</div>
+              <div class="meta-row"><span class="meta-label">Subject:</span> Daily work log</div>
+            </header>
+
+            <header id="composer-meta-sms" class="composer-meta">
+              <div class="meta-pill">SMS Thread</div>
+              <div class="meta-hint">Short updates, one line per item</div>
+            </header>
+
+            <header id="composer-meta-whatsapp" class="composer-meta">
+              <div class="meta-pill whatsapp">WhatsApp Chat</div>
+              <div class="meta-hint">Team chat style updates</div>
+            </header>
+
+            <label>
+              Message Lines
+              <textarea name="message" rows="10" placeholder="Worked 2h on Alpha&#10;30m sprint planning" required></textarea>
+            </label>
+          </section>
+          <div class="form-actions">
+            <button type="submit">Submit and Process</button>
+            <button id="toggle-results" data-results-toggle type="button" class="toggle-results">Hide Results</button>
+          </div>
+          <div id="status-line" class="status-line">
+            <span id="status-spinner" class="status-spinner" aria-hidden="true"></span>
+            <span id="status-text">Loading...</span>
+            <span id="status-elapsed" class="status-elapsed"></span>
+          </div>
+          <section id="latest-confirmation" class="latest-confirmation hidden" aria-live="polite"></section>
         </form>
       </section>
 
-      <section id="results-panel" class="panel">
-        <h2>Results</h2>
-        <div id="status-line">Loading...</div>
+      <section id="results-panel" class="panel" hidden>
+        <div class="results-head">
+          <h2>Results</h2>
+          <button id="toggle-results-secondary" data-results-toggle type="button" class="toggle-results">Hide Results</button>
+        </div>
         <div id="error-box" class="error-box" aria-live="polite"></div>
         <div id="summary" class="summary"></div>
         <div id="entries" class="entries"></div>

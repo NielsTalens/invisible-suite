@@ -39,13 +39,15 @@ class TimyWeb < Sinatra::Base
     return halt 422, { error: validation_error }.to_json if validation_error
 
     writer = Timy::InboxWriter.new(inbox_dir: settings.inbox_dir)
+    created_source_files = []
     normalized.fetch("lines").each do |line|
-      writer.write(
+      created_path = writer.write(
         "channel" => normalized.fetch("channel"),
         "sender" => normalized.fetch("sender"),
         "timestamp" => Time.now.utc.iso8601,
         "message" => line
       )
+      created_source_files << File.basename(created_path)
     end
 
     recognizer = if settings.recognizer_factory.respond_to?(:call)
@@ -62,7 +64,9 @@ class TimyWeb < Sinatra::Base
       reporter: Timy::CliReporter.new(io: StringIO.new)
     )
     processor.run
-    Timy::ResultsReader.new(data_dir: settings.data_dir).read.to_json
+    result = Timy::ResultsReader.new(data_dir: settings.data_dir).read
+    result["created_source_files"] = created_source_files
+    result.to_json
   rescue JSON::ParserError
     halt 422, { error: "Invalid JSON payload" }.to_json
   rescue StandardError => e
