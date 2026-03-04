@@ -24,7 +24,7 @@ module Timy
       end
 
       if valid_entry?(entry)
-        apply_catalog_rules(entry)
+        apply_catalog_rules(entry) if entry["status"] == "ok"
         if entry["status"] == "needs_clarification"
           entry["clarification_question"] = safe_question(entry["clarification_question"])
         else
@@ -94,10 +94,10 @@ module Timy
 
       feedback = []
       unless normalized_project
-        feedback << "Project '#{entry["project"]}' is not valid. Use one of: #{@projects.join(', ')}."
+        feedback << "You can't register time on #{entry["project"]} yet. Please choose one of your available projects: Gareth, Xero, or B&B. If you think you need to write to #{entry["project"]}, please contact steven@example.com"
       end
       unless normalized_task
-        feedback << "Task '#{entry["task_description"]}' is not valid. Use one of: #{@task_names.join(', ')}."
+        feedback << "You can't register time on #{entry["task_description"]} yet. Please choose one of your available tasks: programming, design, meetings, or administrative. If you think you need to write to #{entry["task_description"]}, please contact steven@example.com"
       end
 
       entry["status"] = "needs_clarification"

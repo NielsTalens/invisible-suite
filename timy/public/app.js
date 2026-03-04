@@ -91,13 +91,15 @@ function renderLatestConfirmation(data, selectedChannel) {
     <h3>Timy Confirmation</h3>
     ${latestEntries.map((entry) => {
       const needsClarification = entry.status === "needs_clarification";
+      const dateOrRange = entry.work_date || (entry.original_timestamp ? String(entry.original_timestamp).slice(0, 10) : "an unspecified date");
+      const timeText = `${entry.duration_hours ?? 0}h`;
       const body = needsClarification
         ? `<p><strong>Clarification needed:</strong> ${entry.clarification_question || "Please clarify details."}</p>`
-        : `<p><strong>Recap:</strong> ${entry.task_description || "Logged"} (${entry.duration_hours ?? 0}h on ${entry.project || "unknown"})</p>`;
+        : `<p>Hi Nelis, thanks! We've recorded your entry for <strong>${entry.task_description || "unknown task"}</strong> on project <strong>${entry.project || "unknown"}</strong>:<br><strong>${timeText}</strong> on <strong>${dateOrRange}</strong>.<br><br>If something isn't right or has changed, simply reply to this message with the updated details.</p>`;
       return `
         <article class="confirmation-item">
           <div class="confirmation-head">
-            <span class="confirmation-sender">Timy</span>
+            <span class="confirmation-sender">Status:</span>
             <span class="confirmation-status ${needsClarification ? "needs-clarification" : "ok"}">
               ${needsClarification ? "Needs clarification" : "Captured"}
             </span>

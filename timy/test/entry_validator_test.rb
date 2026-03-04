@@ -136,7 +136,10 @@ class EntryValidatorTest < Minitest::Test
     result = Timy::EntryValidator.new(catalog: @catalog).validate(@source, entry)
 
     assert_equal "needs_clarification", result["status"]
-    assert_match(/Gareth, Xero, B&B/, result["clarification_question"])
+    assert_equal(
+      "You can't register time on Moonshot yet. Please choose one of your available projects: Gareth, Xero, or B&B. If you think you need to write to Moonshot, please contact steven@example.com",
+      result["clarification_question"]
+    )
   end
 
   def test_marks_needs_clarification_when_task_is_unrecognized
@@ -152,6 +155,26 @@ class EntryValidatorTest < Minitest::Test
     result = Timy::EntryValidator.new(catalog: @catalog).validate(@source, entry)
 
     assert_equal "needs_clarification", result["status"]
-    assert_match(/programming, design, meetings, administrative/, result["clarification_question"])
+    assert_equal(
+      "You can't register time on deep thinking yet. Please choose one of your available tasks: programming, design, meetings, or administrative. If you think you need to write to deep thinking, please contact steven@example.com",
+      result["clarification_question"]
+    )
+  end
+
+  def test_does_not_replace_existing_unclear_message_with_catalog_errors
+    entry = {
+      "work_date" => "2026-03-01",
+      "project" => "unknown",
+      "task_description" => "Unable to extract task details",
+      "duration_hours" => 0.0,
+      "confidence" => "low",
+      "status" => "needs_clarification",
+      "clarification_question" => "I could not fully parse this message. Could you clarify the project, date, and time spent?"
+    }
+
+    result = Timy::EntryValidator.new(catalog: @catalog).validate(@source, entry)
+
+    assert_equal "needs_clarification", result["status"]
+    assert_equal "I could not fully parse this message. Could you clarify the project, date, and time spent?", result["clarification_question"]
   end
 end

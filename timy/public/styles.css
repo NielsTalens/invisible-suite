@@ -25,6 +25,16 @@ body {
   padding: 1rem;
 }
 
+.layout.results-hidden {
+  grid-template-columns: 1fr;
+}
+
+.layout.results-hidden #input-panel {
+  max-width: 760px;
+  width: 100%;
+  justify-self: center;
+}
+
 .panel {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -66,6 +76,13 @@ button {
   color: #fff;
   font-weight: 700;
   cursor: pointer;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .channel-picker {
