@@ -93,4 +93,21 @@ class OpenAiRecognizerTest < Minitest::Test
     assert_equal "unknown", result["project"]
     assert_equal 0.0, result["duration_hours"]
   end
+
+  def test_normalizes_array_json_response_to_first_hash
+    client = FakeClient.new(
+      "output_text" => '[{"work_date":"2026-03-04","project":"Alpha","task_description":"Dev","duration_hours":2,"confidence":"high","status":"ok"}]'
+    )
+    recognizer = Timy::OpenAiRecognizer.new(client: client, model: "gpt-4.1-mini")
+
+    result = recognizer.recognize(
+      "channel" => "mail",
+      "sender" => "niels@example.com",
+      "timestamp" => "2026-03-04T09:00:00Z",
+      "message" => "Worked 2h"
+    )
+
+    assert_equal "Alpha", result["project"]
+    assert_equal "ok", result["status"]
+  end
 end

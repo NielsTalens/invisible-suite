@@ -24,7 +24,8 @@ module Timy
     def recognize(message)
       response = @client.responses.create(parameters: request_payload(message, @model))
       text = extract_text(response)
-      JSON.parse(normalize_json_text(text))
+      parsed = JSON.parse(normalize_json_text(text))
+      normalize_parsed_payload(parsed)
     rescue StandardError => e
       FALLBACK.merge("_recognizer_error" => e.message)
     end
@@ -65,6 +66,13 @@ module Timy
         stripped = stripped.gsub(/\A```[a-zA-Z]*\n?/, "").gsub(/\n?```\z/, "").strip
       end
       stripped
+    end
+
+    def normalize_parsed_payload(parsed)
+      return parsed if parsed.is_a?(Hash)
+      return parsed.find { |item| item.is_a?(Hash) } if parsed.is_a?(Array)
+
+      raise "OpenAI parsed payload is not an object"
     end
 
     class HttpClient

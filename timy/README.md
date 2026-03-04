@@ -34,6 +34,21 @@ Example:
 ruby bin/process_messages
 ```
 
+## Browser simulation
+
+Start the web app:
+
+```bash
+ruby app.rb -p 4567
+```
+
+Open `http://localhost:4567`:
+- left panel: select channel and enter one or more message lines (one entry per line)
+- sender is fixed by channel for demo purposes
+- timestamp is generated automatically at submit time
+- submit writes JSON files to `inbox/` and processes in one go
+- right panel refreshes summary, entries, and follow-up questions
+
 ## Output files
 
 - `data/timesheet_entries.yml`
