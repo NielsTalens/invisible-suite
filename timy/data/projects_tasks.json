@@ -1,0 +1,9 @@
+{
+  "projects": ["Gareth", "Xero", "B&B"],
+  "tasks": {
+    "programming": ["coding", "engineering", "development", "developing"],
+    "design": ["designing", "graphics", "creating graphics", "graphic design", "ui", "ux"],
+    "meetings": ["meeting", "standup", "planning", "retro", "sync"],
+    "administrative": ["admin", "administration", "paperwork", "invoicing"]
+  }
+}
