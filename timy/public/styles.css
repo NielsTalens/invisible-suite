@@ -213,6 +213,46 @@ button {
 }
 .error-box.visible { display: block; }
 
+.latest-confirmation {
+  margin-top: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+.latest-confirmation.hidden { display: none; }
+.latest-confirmation h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+.latest-confirmation.channel-mail {
+  background: linear-gradient(180deg, #f0f6ff 0%, #fdfefe 100%);
+  border-color: #7ba5da;
+}
+.latest-confirmation.channel-sms {
+  background: linear-gradient(180deg, #f5f2ff 0%, #fcfbff 100%);
+  border-color: #8d7dd8;
+}
+.latest-confirmation.channel-whatsapp {
+  background: linear-gradient(180deg, #ecfff5 0%, #f9fffb 100%);
+  border-color: #3da57a;
+}
+.confirmation-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  background: #ffffffcc;
+}
+.confirmation-item + .confirmation-item { margin-top: 0.45rem; }
+.confirmation-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+.confirmation-sender { font-weight: 700; }
+.confirmation-status.ok { color: #1f6f4f; }
+.confirmation-status.needs-clarification { color: #8a4b00; }
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

@@ -8,6 +8,7 @@ const statusLine = document.getElementById("status-line");
 const statusText = document.getElementById("status-text");
 const statusElapsed = document.getElementById("status-elapsed");
 const errorBox = document.getElementById("error-box");
+const latestConfirmation = document.getElementById("latest-confirmation");
 const channelOptions = document.querySelectorAll(".channel-option");
 let processingTimer = null;
 let processingStartedAt = null;
@@ -64,6 +65,45 @@ function render(data) {
   followupsEl.innerHTML = `<strong>Follow-up Questions</strong>${unclear
     .map((entry) => `<p>${entry.source_file}: ${entry.clarification_question}</p>`)
     .join("")}`;
+}
+
+function clearLatestConfirmation() {
+  latestConfirmation.innerHTML = "";
+  latestConfirmation.classList.add("hidden");
+  latestConfirmation.classList.remove("channel-mail", "channel-sms", "channel-whatsapp");
+}
+
+function renderLatestConfirmation(data, selectedChannel) {
+  const created = new Set((data.created_source_files || []).map(String));
+  const latestEntries = (data.entries || []).filter((entry) => created.has(String(entry.source_file)));
+  if (latestEntries.length === 0) {
+    clearLatestConfirmation();
+    return;
+  }
+
+  latestConfirmation.classList.remove("hidden");
+  latestConfirmation.classList.add(`channel-${selectedChannel}`);
+
+  latestConfirmation.innerHTML = `
+    <h3>Timy Confirmation</h3>
+    ${latestEntries.map((entry) => {
+      const needsClarification = entry.status === "needs_clarification";
+      const body = needsClarification
+        ? `<p><strong>Clarification needed:</strong> ${entry.clarification_question || "Please clarify details."}</p>`
+        : `<p><strong>Recap:</strong> ${entry.task_description || "Logged"} (${entry.duration_hours ?? 0}h on ${entry.project || "unknown"})</p>`;
+      return `
+        <article class="confirmation-item">
+          <div class="confirmation-head">
+            <span class="confirmation-sender">Timy</span>
+            <span class="confirmation-status ${needsClarification ? "needs-clarification" : "ok"}">
+              ${needsClarification ? "Needs clarification" : "Captured"}
+            </span>
+          </div>
+          ${body}
+        </article>
+      `;
+    }).join("")}
+  `;
 }
 
 function clearError() {
@@ -139,9 +179,11 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
   startProcessingStatus("Submitting and processing...");
   clearError();
+  clearLatestConfirmation();
 
+  const selectedChannel = currentChannelValue();
   const payload = {
-    channel: currentChannelValue(),
+    channel: selectedChannel,
     lines: form.message.value.split("\n"),
   };
 
@@ -158,6 +200,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     render(data);
+    renderLatestConfirmation(data, selectedChannel);
     stopProcessingStatus("Processed successfully");
     form.message.value = "";
   } catch (error) {

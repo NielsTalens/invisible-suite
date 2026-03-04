@@ -28,5 +28,6 @@ class UiShellTest < Minitest::Test
     assert_includes last_response.body, 'id="composer-meta-whatsapp"'
     assert_includes last_response.body, 'id="status-spinner"'
     assert_includes last_response.body, 'id="status-elapsed"'
+    assert_includes last_response.body, 'id="latest-confirmation"'
   end
 end
