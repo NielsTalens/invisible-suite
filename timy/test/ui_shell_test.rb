@@ -15,6 +15,8 @@ class UiShellTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_includes last_response.body, 'id="input-panel"'
     assert_includes last_response.body, 'id="results-panel"'
+    assert_includes last_response.body, 'id="toggle-results"'
+    assert_includes last_response.body, 'id="results-content"'
     assert_includes last_response.body, 'id="channel-mail"'
     assert_includes last_response.body, '✉️'
     assert_includes last_response.body, '💬'

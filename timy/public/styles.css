@@ -168,6 +168,27 @@ button {
   margin-bottom: 0.5rem;
 }
 
+.results-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.results-head h2 {
+  margin: 0 0 0.5rem 0;
+}
+
+.toggle-results {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: #3f3a33;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .followups {
   margin-top: 0.75rem;
   padding: 0.75rem;

@@ -4,6 +4,8 @@ const composerShell = document.getElementById("composer-shell");
 const summaryEl = document.getElementById("summary");
 const entriesEl = document.getElementById("entries");
 const followupsEl = document.getElementById("followups");
+const resultsContent = document.getElementById("results-content");
+const toggleResultsButton = document.getElementById("toggle-results");
 const statusLine = document.getElementById("status-line");
 const statusText = document.getElementById("status-text");
 const statusElapsed = document.getElementById("status-elapsed");
@@ -116,6 +118,10 @@ function showError(message) {
   errorBox.classList.add("visible");
 }
 
+function updateResultsToggleLabel() {
+  toggleResultsButton.textContent = resultsContent.hidden ? "Show Results" : "Hide Results";
+}
+
 function formatElapsed(seconds) {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
@@ -175,6 +181,11 @@ form.addEventListener("change", (event) => {
   }
 });
 
+toggleResultsButton.addEventListener("click", () => {
+  resultsContent.hidden = !resultsContent.hidden;
+  updateResultsToggleLabel();
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   startProcessingStatus("Submitting and processing...");
@@ -210,4 +221,5 @@ form.addEventListener("submit", async (event) => {
 });
 
 setChannelTheme(currentChannelValue());
+updateResultsToggleLabel();
 loadResults();
