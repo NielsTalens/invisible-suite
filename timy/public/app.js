@@ -1,5 +1,6 @@
 const form = document.getElementById("entry-form");
 const inputPanel = document.getElementById("input-panel");
+const composerShell = document.getElementById("composer-shell");
 const summaryEl = document.getElementById("summary");
 const entriesEl = document.getElementById("entries");
 const followupsEl = document.getElementById("followups");
@@ -15,11 +16,22 @@ function currentChannelValue() {
 function setChannelTheme(channel) {
   inputPanel.classList.remove("channel-mail", "channel-sms", "channel-whatsapp");
   inputPanel.classList.add(`channel-${channel}`);
+  composerShell.classList.remove("composer-mail", "composer-sms", "composer-whatsapp");
+  composerShell.classList.add(`composer-${channel}`);
 
   channelOptions.forEach((option) => {
     const input = option.querySelector('input[name="channel"]');
     option.classList.toggle("active", input && input.checked);
   });
+
+  const textarea = form.message;
+  if (channel === "mail") {
+    textarea.placeholder = "Worked 2h on Alpha\n30m sprint planning";
+  } else if (channel === "sms") {
+    textarea.placeholder = "2h Alpha build fixes\n1h client call";
+  } else {
+    textarea.placeholder = "Morning: 1.5h onboarding\nAfternoon: 2h QA follow-up";
+  }
 }
 
 function render(data) {

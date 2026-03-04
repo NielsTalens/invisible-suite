@@ -35,10 +35,28 @@
             </label>
           </fieldset>
 
-          <label>
-            Message Lines
-            <textarea name="message" rows="10" placeholder="Worked 2h on Alpha&#10;30m sprint planning" required></textarea>
-          </label>
+          <section id="composer-shell" class="composer-shell composer-mail">
+            <header id="composer-meta-mail" class="composer-meta">
+              <div class="meta-row"><span class="meta-label">From:</span> Timy Demo</div>
+              <div class="meta-row"><span class="meta-label">To:</span> Project mailbox</div>
+              <div class="meta-row"><span class="meta-label">Subject:</span> Daily work log</div>
+            </header>
+
+            <header id="composer-meta-sms" class="composer-meta">
+              <div class="meta-pill">SMS Thread</div>
+              <div class="meta-hint">Short updates, one line per item</div>
+            </header>
+
+            <header id="composer-meta-whatsapp" class="composer-meta">
+              <div class="meta-pill whatsapp">WhatsApp Chat</div>
+              <div class="meta-hint">Team chat style updates</div>
+            </header>
+
+            <label>
+              Message Lines
+              <textarea name="message" rows="10" placeholder="Worked 2h on Alpha&#10;30m sprint planning" required></textarea>
+            </label>
+          </section>
           <button type="submit">Submit and Process</button>
         </form>
       </section>

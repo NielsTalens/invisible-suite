@@ -103,6 +103,50 @@ button {
   background: var(--accent-soft);
 }
 
+.composer-shell {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.7rem;
+}
+
+.composer-meta { display: none; margin-bottom: 0.6rem; }
+.meta-row { font-size: 0.9rem; color: #4f565f; }
+.meta-label { font-weight: 700; color: #2c3440; }
+.meta-pill {
+  display: inline-block;
+  background: #e4ebf7;
+  color: #22324b;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.meta-pill.whatsapp { background: #d4f5e6; color: #17553a; }
+.meta-hint { margin-top: 0.2rem; font-size: 0.85rem; color: #6a645b; }
+
+.composer-mail {
+  background: linear-gradient(180deg, #f0f6ff 0%, #fdfefe 100%);
+}
+.composer-mail #composer-meta-mail { display: block; }
+
+.composer-sms {
+  background: linear-gradient(180deg, #f5f2ff 0%, #fcfbff 100%);
+}
+.composer-sms #composer-meta-sms { display: block; }
+.composer-sms textarea {
+  background: #f1edff;
+  border-color: #c8b9ff;
+}
+
+.composer-whatsapp {
+  background: linear-gradient(180deg, #ecfff5 0%, #f9fffb 100%);
+}
+.composer-whatsapp #composer-meta-whatsapp { display: block; }
+.composer-whatsapp textarea {
+  background: #edfff5;
+  border-color: #94d8b3;
+}
+
 .summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(90px, 1fr));

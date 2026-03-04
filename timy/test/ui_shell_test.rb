@@ -21,5 +21,10 @@ class UiShellTest < Minitest::Test
     assert_includes last_response.body, '🟢'
     refute_includes last_response.body, 'name="sender"'
     refute_includes last_response.body, 'name="timestamp_local"'
+    assert_includes last_response.body, 'id="composer-shell"'
+    assert_includes last_response.body, 'class="composer-shell composer-mail"'
+    assert_includes last_response.body, 'id="composer-meta-mail"'
+    assert_includes last_response.body, 'id="composer-meta-sms"'
+    assert_includes last_response.body, 'id="composer-meta-whatsapp"'
   end
 end
