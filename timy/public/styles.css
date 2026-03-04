@@ -176,7 +176,30 @@ button {
   border-radius: 10px;
 }
 
-#status-line { margin-bottom: 0.75rem; font-weight: 500; }
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+.status-spinner {
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid #d4d4d4;
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  opacity: 0;
+}
+.status-line.is-processing .status-spinner {
+  opacity: 1;
+  animation: spin 0.8s linear infinite;
+}
+.status-elapsed {
+  margin-left: auto;
+  color: #666057;
+  font-variant-numeric: tabular-nums;
+}
 .error { color: #b0281a; }
 .warning { color: var(--warn); }
 .error-box {
@@ -189,6 +212,10 @@ button {
   padding: 0.55rem 0.7rem;
 }
 .error-box.visible { display: block; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }

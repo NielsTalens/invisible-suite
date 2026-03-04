@@ -5,8 +5,12 @@ const summaryEl = document.getElementById("summary");
 const entriesEl = document.getElementById("entries");
 const followupsEl = document.getElementById("followups");
 const statusLine = document.getElementById("status-line");
+const statusText = document.getElementById("status-text");
+const statusElapsed = document.getElementById("status-elapsed");
 const errorBox = document.getElementById("error-box");
 const channelOptions = document.querySelectorAll(".channel-option");
+let processingTimer = null;
+let processingStartedAt = null;
 
 function currentChannelValue() {
   const selected = form.querySelector('input[name="channel"]:checked');
@@ -72,18 +76,55 @@ function showError(message) {
   errorBox.classList.add("visible");
 }
 
+function formatElapsed(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+function startProcessingStatus(message) {
+  if (processingTimer) {
+    clearInterval(processingTimer);
+  }
+  processingStartedAt = Date.now();
+  statusLine.classList.add("is-processing");
+  statusLine.classList.remove("error");
+  statusText.textContent = message;
+  statusElapsed.textContent = "00:00";
+  processingTimer = setInterval(() => {
+    const seconds = Math.floor((Date.now() - processingStartedAt) / 1000);
+    statusElapsed.textContent = formatElapsed(seconds);
+  }, 250);
+}
+
+function stopProcessingStatus(message, isError = false) {
+  const elapsedMs = processingStartedAt ? Date.now() - processingStartedAt : 0;
+  if (processingTimer) {
+    clearInterval(processingTimer);
+    processingTimer = null;
+  }
+  processingStartedAt = null;
+  statusLine.classList.remove("is-processing");
+  statusLine.classList.toggle("error", isError);
+  statusText.textContent = message;
+  statusElapsed.textContent = `${(elapsedMs / 1000).toFixed(1)}s`;
+}
+
 async function loadResults() {
-  statusLine.textContent = "Loading results...";
-  statusLine.className = "";
+  statusLine.classList.remove("error");
+  statusText.textContent = "Loading results...";
+  statusElapsed.textContent = "";
   clearError();
   try {
     const res = await fetch("/api/results");
     const data = await res.json();
     render(data);
-    statusLine.textContent = "Ready";
+    statusText.textContent = "Ready";
+    statusElapsed.textContent = "";
   } catch (error) {
-    statusLine.textContent = `Failed to load results: ${error.message}`;
-    statusLine.className = "error";
+    statusLine.classList.add("error");
+    statusText.textContent = `Failed to load results: ${error.message}`;
+    statusElapsed.textContent = "";
     showError(error.message);
   }
 }
@@ -96,8 +137,7 @@ form.addEventListener("change", (event) => {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  statusLine.textContent = "Submitting and processing...";
-  statusLine.className = "";
+  startProcessingStatus("Submitting and processing...");
   clearError();
 
   const payload = {
@@ -118,11 +158,10 @@ form.addEventListener("submit", async (event) => {
     }
 
     render(data);
-    statusLine.textContent = "Processed successfully";
+    stopProcessingStatus("Processed successfully");
     form.message.value = "";
   } catch (error) {
-    statusLine.textContent = `Submit failed: ${error.message}`;
-    statusLine.className = "error";
+    stopProcessingStatus(`Submit failed: ${error.message}`, true);
     showError(error.message);
   }
 });
